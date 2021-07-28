@@ -28,6 +28,15 @@
 
     <style>
 
+      .summable{
+        text-align: right;
+      }
+
+      .total{
+        font-size: 24px;
+        text-align: right;
+      }
+
       .error-label{
         font-size: 14px;
       }
@@ -211,12 +220,12 @@
 
                 <div class="col-sm-2">
                   <label for="primaryMobile" class="form-label">Mobile</label>
-                  <input type="text" class="form-control" id="primaryMobile" name="primaryMobile" placeholder="" value="" >
+                  <input type="text" class="form-control" id="primaryMobile" name="primaryMobile" placeholder="" value="" data-mask="(999) 999-9999" >
                 </div>
 
                 <div class="col-sm-2 ">
                   <label for="primaryFax" class="form-label">Fax</label>
-                  <input type="text" class="form-control" id="primaryFax" name="primaryFax" placeholder="" value="" >
+                  <input type="text" class="form-control" id="primaryFax" name="primaryFax" placeholder="" value="" data-mask="(999) 999-9999">
                 </div>
 
 
@@ -327,11 +336,13 @@
 
 
 <!-- PANE SPECIALS -->                        
-            <div class="tab-pane fade" id="specials" role="tabpanel" aria-labelledby="specials-tab">
+        <div class="tab-pane fade" id="specials" role="tabpanel" aria-labelledby="specials-tab">
               
               
               <!-- ROW -->
               <div class="row g-3">
+
+               
 
                 <div class="col-sm-3">
                   <label for="discount" class="form-label">Show Discounts(%)</label>
@@ -493,6 +504,12 @@
                 
                 </div>
 
+
+                  
+                
+
+             
+
               
               </div>
               <!-- END ROW -->
@@ -500,15 +517,14 @@
 
               <hr class="my-4">
 
-              <div class="d-flex justify-content-center" >
-                <button class="btn btn-primary btn-lg" type="button" id="previousTwo" >Previous</button> 
-                <button class="btn btn-primary btn-lg" type="button" id="nextTwo">Next</button>
-              </div>
+                <div class="d-flex justify-content-center" >
+                  <button class="btn btn-primary btn-lg" type="button" id="previousTwo" >Previous</button> 
+                  <button class="btn btn-primary btn-lg" type="button" id="nextTwo">Next</button>
+                </div>
 
               
-              
     
-            </div>
+        </div>
 <!-- END OF PANE -->
 
 
@@ -516,141 +532,185 @@
             <div class="tab-pane fade" id="seminar" role="tabpanel" aria-labelledby="seminar-tab">
               
               <!-- ROW -->
-              <div class="row g-3">
-
-                <div class="sm-12">
-                  <div class="card">
-                    <h6 class="card-header">Thank you for considering taking part in our Pre-Show Seminars.</h6>
-                    <div class="card-body">
-                      <p class="card-text">
-                        <b>Times:</b> 9:00 am to 4:00 pm MST. <br/>                      
-                        <b>Duration:</b> 30 minute sessions<br/>
-                        Time slots will be allocated by Atlas and the seminars will be held during normal working hours.<br/>
-                        Please indicate which day(s) works best and whether you prefer AM or PM.<br/>
-                      </p>
-                     
-                    </div>
-                  </div>
-                </div>
-
-
-                <div class="col-sm-12">
-                  <label for="discount" class="form-label">Additional Seminars (Additional seminars are $500.00/session outside your plan.)</label>
-                  
-                  <div class="col-sm-6">
-                  <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                      <button class="btn btn-outline-secondary" type="button" id="seminarMinus" ><i class="fa fa-minus"></i></button>
-                    </div>
-                    <input type="text" id="seminarCount" name="seminarCount" class="form-control text-center" placeholder="" aria-label="" aria-describedby="basic-addon1" readonly value=0>
-                    <div class="input-group-append">
-                      <button class="btn btn-outline-secondary" type="button" id="seminarPlus"><i class="fa fa-plus"></i></button>
-                    </div>
-                  </div>
-                  </div>
-
-
-                </div>
-
-                <div class="col-sm-12">
-                  <table class="table table-bordered table-condensed">
-                    
-                      <thead>
-                        <tr>
-                          <th>Day</th>
-                          <th>Date</th>
-                          <th>AM</th>
-                          <th>PM</th>
-                        </tr>
-                      </thead>
-                    
-                      <tbody>
-                      
-                        <tr>
-                          <td>Monday</td><td>Nov 8 </td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov8" value="8-AM"></td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov8" value="8-PM"></td>
-                        </tr>
-                      
-                        <tr>
-                          <td>Tuesday</td><td>Nov 9 </td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov9" value="9-AM"></td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov9" value="9-PM"></td>
-                        </tr>
-                        
-                        <tr>
-                          <td>Wednesday</td><td>Nov 10 </td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov10" value="10-AM"></td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov10" value="10-PM"></td>
-                        </tr>
-                        
-                        <tr>
-                          <td>Friday</td><td>Nov 12 </td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov12" value="12-AM"></td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov12" value="12-PM"></td>
-                        </tr>
-                        
-                        <tr>
-                          <td>Monday</td><td>Nov 15 </td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov15" value="15-AM"></td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov15" value="15-PM"></td>
-                        </tr>
-                        
-                        <tr>
-                          <td>Tuesday</td><td>Nov 16 </td>
-                          <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov16" value="16-AM"></td><td><input type="checkbox" class="semdays" name="seminardays[]" data="nov16" value="16-PM"></td>
-                        </tr>
-
-                    </tbody>
-                    
-                   </table>
-                </div>
-
-                <div class="col-sm-4">
-                  <label for="address" class="form-label">Seminar Presenter</label>
-                  <input type="text" class="form-control" name="seminarName" id="seminarName" placeholder="Presenter Name" value="" required>
-                  <span id="error_seminarName" class="text-danger error-label"></span>
-                </div>
-
-                <div class="col-sm-4">
-                  <label for="address" class="form-label">&nbsp;</label>
-                  <input type="text" class="form-control" name="seminarEmail" id="seminarEmail" placeholder="Presenter Email" value="" required>
-                  <span id="error_seminarEmail" class="text-danger error-label"></span>
-                </div>
-
-                <div class="col-sm-4">
-                  <label for="address" class="form-label">&nbsp;</label>
-                  <input type="text" class="form-control" name="seminarPhone" id="seminarPhone" placeholder="Presenter Phone" value="" required>
-                  <span id="error_seminarPhone" class="text-danger error-label"></span>
-                </div>
-
-
-
-
-                <div id="seminarTemplate" style="display: none;">
-                  <div class="row mt-2" id="inputFormSeminar"> 
-                    <span id="error_seminarAdd" class="text-danger error-label"></span>
-                    <div class="col-sm-4"><input type="text" class="form-control" name="seminarAddName[]" placeholder="Presenter Name" value="" ><div class="invalid-feedback">Presenter Name is required.</div></div>
-                    <div class="col-sm-3"><input type="text" class="form-control" name="seminarAddEmail[]" placeholder="Presenter Email" value="" ><div class="invalid-feedback">Presenter Email is required.</div></div>
-                    <div class="col-sm-3"><input type="text" class="form-control" name="seminarAddMobile[]" placeholder="Presenter  Mobile" value="" ><div class="invalid-feedback">Presenter Mobile is required.</div></div>
-                    <div class="col-sm-2"><div class="input-group-append"><button id="removePresenters" type="button" class="btn btn-danger">Remove</button></div></div>
-                  </div>
-                </div>
-
-
-                <div class="col-12">
-                  <label for="additionalPresenters" class="form-label">Add Additional Presenter(s)</label>                  
-                  <div id="error_additionalPresenters" class="text-danger error-label"></div>
-                  <div class="mb-3" id="additionalPresenters"></div>
-                  <button id="addPresenters" type="button" class="btn btn-success">Add Presenters</button>
-                </div>
-
+              <div class="row g-3" id="hidder">
                 
-                
+                 
+                  <div class="sm-12">
+                    <div class="cards">
+                      <h6 class="card-header">Thank you for considering taking part in our Pre-Show Seminars.</h6>
+                      <div class="card-body">
+                        <p class="card-text">
+                          <b>Times:</b> 9:00 am to 4:00 pm MST. <br/>                      
+                          <b>Duration:</b> 30 minute sessions<br/>
+                          Time slots will be allocated by Atlas and the seminars will be held during normal working hours.<br/>
+                          Please indicate which day(s) works best and whether you prefer AM or PM.<br/>
+                        </p>
+                      
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-sm-12">
+                    <label for="discount" class="form-label">Additional Seminars (Additional seminars are $500.00/session outside your plan.)</label>
+                    
+                    <div class="col-sm-6">
+                    <div class="input-group mb-3">
+                      <div class="input-group-prepend">
+                        <button class="btn btn-outline-secondary" type="button" id="seminarMinus" ><i class="fa fa-minus"></i></button>
+                      </div>
+                      <input type="text" id="seminarCount" name="seminarCount" class="form-control text-center" placeholder="" aria-label="" aria-describedby="basic-addon1" readonly value=0>
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="seminarPlus"><i class="fa fa-plus"></i></button>
+                      </div>
+                    </div>
+                    </div>
+
+
+                  </div>
+
+                  <div class="col-sm-12">
+                    <table class="table table-bordered table-condensed">
+                      
+                        <thead>
+                          <tr>
+                            <th>Day</th>
+                            <th>Date</th>
+                            <th>AM</th>
+                            <th>PM</th>
+                          </tr>
+                        </thead>
+                      
+                        <tbody>
+                        
+                          <tr>
+                            <td>Monday</td><td>Nov 8 </td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov8" value="8-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov8" value="8-PM"></td>
+                          </tr>
+                        
+                          <tr>
+                            <td>Tuesday</td><td>Nov 9 </td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov9" value="9-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov9" value="9-PM"></td>
+                          </tr>
+                          
+                          <tr>
+                            <td>Wednesday</td><td>Nov 10 </td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov10" value="10-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov10" value="10-PM"></td>
+                          </tr>
+                          
+                          <tr>
+                            <td>Friday</td><td>Nov 12 </td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov12" value="12-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov12" value="12-PM"></td>
+                          </tr>
+                          
+                          <tr>
+                            <td>Monday</td><td>Nov 15 </td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov15" value="15-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov15" value="15-PM"></td>
+                          </tr>
+                          
+                          <tr>
+                            <td>Tuesday</td><td>Nov 16 </td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov16" value="16-AM"></td><td><input type="checkbox" class="semdays" name="seminardays[]" data="nov16" value="16-PM"></td>
+                          </tr>
+
+                      </tbody>
+                      
+                    </table>
+                  </div>
+
+                  <div class="col-sm-4">
+                    <label for="address" class="form-label">Seminar Presenter</label>
+                    <input type="text" class="form-control" name="seminarName" id="seminarName" placeholder="Presenter Name" value="" required>
+                    <span id="error_seminarName" class="text-danger error-label"></span>
+                  </div>
+
+                  <div class="col-sm-4">
+                    <label for="address" class="form-label">&nbsp;</label>
+                    <input type="text" class="form-control" name="seminarEmail" id="seminarEmail" placeholder="Presenter Email" value="" required>
+                    <span id="error_seminarEmail" class="text-danger error-label"></span>
+                  </div>
+
+                  <div class="col-sm-4">
+                    <label for="address" class="form-label">&nbsp;</label>
+                    <input type="text" class="form-control" name="seminarPhone" id="seminarPhone" placeholder="Presenter Phone" value="" required>
+                    <span id="error_seminarPhone" class="text-danger error-label"></span>
+                  </div>
+
+
+
+
+                    <div id="seminarTemplate" style="display: none;">
+                      <div class="row mt-2" id="inputFormSeminar"> 
+                        <span id="error_seminarAdd" class="text-danger error-label"></span>
+                        <div class="col-sm-4"><input type="text" class="form-control" name="seminarAddName[]" placeholder="Presenter Name" value="" ><div class="invalid-feedback">Presenter Name is required.</div></div>
+                        <div class="col-sm-3"><input type="text" class="form-control" name="seminarAddEmail[]" placeholder="Presenter Email" value="" ><div class="invalid-feedback">Presenter Email is required.</div></div>
+                        <div class="col-sm-3"><input type="text" class="form-control" name="seminarAddMobile[]" placeholder="Presenter  Mobile" value="" ><div class="invalid-feedback">Presenter Mobile is required.</div></div>
+                        <div class="col-sm-2"><div class="input-group-append"><button id="removePresenters" type="button" class="btn btn-danger">Remove</button></div></div>
+                      </div>
+                    </div>
+
+
+                    <div class="col-12">
+                      <label for="additionalPresenters" class="form-label">Add Additional Presenter(s)</label>                  
+                      <div id="error_additionalPresenters" class="text-danger error-label"></div>
+                      <div class="mb-3" id="additionalPresenters"></div>
+                      <button id="addPresenters" type="button" class="btn btn-success">Add Presenters</button>
+                    </div>
+
+              
+
+
 
               
               </div>
               <!-- END ROW -->
+
+
+
+              <hr class="my-4">
+
+              <div class="col-sm-12">
+                <div class="cards">
+                  <h5 class="card-header">Cost Summary</h5>
+                  <div class="card-body">
+                   
+                    <table class="table">
+                      <tbody><tr>
+                          <th>Registration Level</th>
+                          <th class="summable" id="regAmount"></th>
+                      </tr>
+                      <tr>
+                          <th>Virtual Show User(s) 
+                            <span  id="virtualParticipantCount"> </span></th>
+                          <th class="summable" id="virtualParticipant"> </th>
+                      </tr>
+                      <tr>
+                          <th>Promotional Flyers <span  id="promotionalFlyerPages"> </span></th>
+                          <th class="summable" id="promotionalFlyerAmount"></th>
+                      </tr>
+                      <tr>
+                          <th>Brand Recognition </th>
+                          <th class="summable" id="brandAmount"></th>
+                      </tr>
+                      <tr>
+                          <th>Seminar Sessions <span id="seminarsessionSum"> </span></th>
+                          <th class="summable" id="seminarsession"></th>
+                      </tr>
+                      <tr>
+                          <th>TOTAL</th>
+                          <th  class="total" id="total"></th>
+                      </tr>
+                  </tbody></table>
+                   
+                  </div>
+                </div>
+              </div>
+
 
               
 

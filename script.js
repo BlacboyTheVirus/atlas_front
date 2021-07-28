@@ -45,6 +45,91 @@ $(document).ready(function () {
 
 
 
+  function doSummary(data){
+
+      var vshowAmount;
+
+      if (data.plan == 'B'){
+
+          $("#regAmount").text(data.planFee);
+
+         
+            if (data.addedUsers == 0) {
+              data.addedUsers = data.addedUsers + 1;
+            }
+            
+            vshowAmount = (data.addedUsers - data.freeUsers) * 50 ;
+         
+
+          $("#virtualParticipantCount").text( data.addedUsers + ' total users ('+ data.freeUsers + ' free) | ' + (data.addedUsers - data.freeUsers)  + ' users @ $50)');
+
+          $("#virtualParticipant").text(vshowAmount);
+
+          
+          $("#promotionalFlyerPages").text(data.flyerPages + ' pages @ $50 per page');
+          $("#promotionalFlyerAmount").text(data.flyerPages * 50);
+
+          $("#brandAmount").text(data.brandRecog);
+
+          $("#seminarsessionSum").text( (data.adSem + data.seminarCount) + ' total session (' + data.adSem + ' free) ' + data.seminarCount + ' additional sessions @ $500' );  
+
+          $("#seminarsession").text( data.seminarCount * 500);    
+      
+      }  else if (data.plan == 'A') {
+
+          $("#regAmount").text(data.planFee);
+
+            vshowAmount = 0;
+
+           
+          
+          $("#virtualParticipantCount").text( 'Unlimited free user)');
+          $("#virtualParticipant").text( vshowAmount );
+
+          
+          $("#promotionalFlyerPages").text(data.flyerPages + ' pages @ $50 per page');
+          $("#promotionalFlyerAmount").text(data.flyerPages * 50);
+
+          $("#brandAmount").text(data.brandRecog);
+
+          $("#seminarsessionSum").text( (data.adSem + data.seminarCount) + ' total session (' + data.adSem + ' free)' + data.seminarCount + ' additional sessions @ $500' );  
+
+          $("#seminarsession").text( data.seminarCount * 500);    
+
+
+      } else if (data.plan == 'C'){
+
+        $("#regAmount").text(data.planFee);
+
+            vshowAmount = 0;
+          
+          $("#virtualParticipantCount").text( ' | Not eligible');
+          $("#virtualParticipant").text( vshowAmount );
+
+          
+          $("#promotionalFlyerPages").text(data.flyerPages + ' pages @ $50 per page');
+          $("#promotionalFlyerAmount").text(data.flyerPages * 50);
+
+          $("#brandAmount").text(data.brandRecog);
+
+          $("#seminarsessionSum").text( ' | Not eligible' );  
+
+          $("#seminarsession").text(0);   
+
+      }
+
+
+      var sum = 0;
+        $(".summable").each(function () {
+            sum += parseFloat($(this).text());
+        });
+        $("#total").text( "$" + sum);
+      
+
+  }
+
+
+
 // Install numeric input filters.
 //Discount 0.0-99.0 Decimal
 $("#discount").inputFilter(function(value) {
@@ -112,10 +197,12 @@ $(".card").on("click", function () {
     $('#participantsForm').hide();
     //disable seminar registration
     $('#seminarPlus, #seminarMinus, #seminarName, #seminarEmail, #seminarPhone, #addPresenters, .semdays').prop('disabled', true);
+    $('#hidder').hide();
   } else {
     $('#participantsForm').show();
     //enable seminar registration
     $('#seminarPlus, #seminarMinus, #seminarName, #seminarEmail, #seminarPhone, #addPresenters, .semdays').prop('disabled', false);
+    $('#hidder').show();
   }
 
   
@@ -244,7 +331,10 @@ $("#seminarPlus").click(function () {
   $('#seminarCount').val((val*1)+1);
 
   data.seminarCount =  ($('#seminarCount').val())*1;
-  updateData(data);   
+  updateData(data);
+
+  doSummary(data);
+
   
 });
 
@@ -262,6 +352,8 @@ $("#seminarMinus").click(function () {
 
     data.seminarCount =  ($('#seminarCount').val())*1;
     updateData(data);   
+
+    doSummary(data);
   }
   
 
@@ -306,7 +398,6 @@ $("#seminarMinus").click(function () {
     var error_primaryFax = "";
 
     var errors = 0;
-
 
     if ($.trim($("#address").val()).length == 0) {
       error_address = "Address is required";
@@ -658,7 +749,9 @@ $('#nextTwo').click(function(){
       data.brandRecog = 50;
     }
 
-    updateData(data);    
+    updateData(data);  
+    
+    doSummary(data);
 
   } else {
 
