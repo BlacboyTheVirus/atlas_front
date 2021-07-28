@@ -1,5 +1,48 @@
 
+ //  Registration Level = (fee from Card)
+ //  Virtual Show User(s) = (added Users - No of freeUsers) * 50 (if plan is A or C == 0)
+ //  Promotional Flyers = no of pages * 50
+ //  Brand Recognition = 50
+ //  Seminar sessions = seminarCount * 500
+
+
+
 $(document).ready(function () {
+
+
+  const data = {
+    plan            : "B",
+    planFee         : 0,
+    freeUsers       : 0,
+    addedUsers      : 0,
+    flyerPages      : 0,
+    brandRecog      : 0,
+    seminarCount    : 0,
+  };
+
+
+  function updateData(data){
+      switch (data.plan) {
+        case 'A':
+          data.planFee = 2000;
+          data.adSem = 2;
+          data.freeUsers = 0;
+          break;
+        case 'B':
+          data.planFee = 1000;
+          data.adSem = 1;
+          data.freeUsers = 1;
+          break;
+        case 'C':
+          data.planFee = 500;
+          data.adSem = 0;
+          data.freeUsers = 0;
+          break;
+      }
+
+      console.log(data);
+  }
+
 
 
 // Install numeric input filters.
@@ -51,6 +94,35 @@ $("#country").on("change",function () {
 
 });
 
+
+
+//Plan selection
+$(".card").on("click", function () {
+  $(".card").removeClass("bg-card-selected");
+  $(this).find("input[name='plan']").prop("checked", true);
+  $(this).addClass("bg-card-selected");
+  
+  var plan = $("input[name='plan']:checked").val();
+  
+  data.plan = plan;
+  updateData(data);
+
+  
+  if (plan == 'C'){
+    $('#participantsForm').hide();
+    //disable seminar registration
+    $('#seminarPlus, #seminarMinus, #seminarName, #seminarEmail, #seminarPhone, #addPresenters, .semdays').prop('disabled', true);
+  } else {
+    $('#participantsForm').show();
+    //enable seminar registration
+    $('#seminarPlus, #seminarMinus, #seminarName, #seminarEmail, #seminarPhone, #addPresenters, .semdays').prop('disabled', false);
+  }
+
+  
+});
+
+
+
 // dating terms
 $("#dating").on("change",function () {
   var dating = $(this).val();
@@ -59,7 +131,6 @@ $("#dating").on("change",function () {
       $("#datingOthers").parent().show();
   }else{
       $("#datingOthers").parent().hide();
-      
   }
 });
 
@@ -79,10 +150,12 @@ $("#incentive").on("change",function () {
 
 
 $("input[name='promoFlyer']").on("click", function () {
-  if($(this).prop("checked") && $(this).val()=="Yes"){
+  if($(this).prop("checked") && $(this).val()=="yes"){
       $("#promoflyerPages").show();
   }else{
       $("#promoflyerPages").hide();
+      $("#error_promoflyerPages").text('');
+      $("#promoflyerPages").removeClass("has-error");
   }
 });
 
@@ -91,16 +164,23 @@ $("input[name='promoFlyer']").on("click", function () {
 //////////////////////////////////////////////////////////////////////////////////////////////////  
 // add participants
   $("#addParticipants").click(function () {
-  
+
     var html = $('#participantTemplate').html();
     $('#newParticipants').append(html);
-    
+
+    data.addedUsers = $("#newParticipants > div").length;
+    updateData(data);
+
     
   });
 
   // remove participants
   $(document).on('click', '#removeParticipants', function () {
       $(this).closest('#inputFormParticipants').remove();
+      
+      data.addedUsers = $("#newParticipants > div").length;
+      updateData(data);
+     
   });
 
 
@@ -124,7 +204,6 @@ $(document).on('click', '#removeHotbuys', function () {
 });
 
 
-
 //////////////////////////////////////////////////////////////////////////////////////////////////  
 // add Hotbuys
 $("#addFreeproducts").click(function () {
@@ -138,7 +217,78 @@ $(document).on('click', '#removeFreeproducts', function () {
 });
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////////////////////////  
+// add Presenters
+$("#addPresenters").click(function () {
+  
+  var html = $('#seminarTemplate').html();
+  $('#additionalPresenters').append(html);
+  
+});
+
+// remove participants
+$(document).on('click', '#removePresenters', function () {
+    $(this).closest('#inputFormSeminar').remove();
+});
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////  
+// Additional Seminar  Slots
+
+
+$("#seminarPlus").click(function () {
+  var val = $('#seminarCount').val();
+  $('#seminarCount').val((val*1)+1);
+
+  data.seminarCount =  ($('#seminarCount').val())*1;
+  updateData(data);   
+  
+});
+
+
+
+$("#seminarMinus").click(function () {
+  
+  var val = $('#seminarCount').val();
+  
+  if (val == 0){
+     return false;
+  } else {
+    valnew = (val*1)-1;
+    $('#seminarCount').val(valnew);
+
+    data.seminarCount =  ($('#seminarCount').val())*1;
+    updateData(data);   
+  }
+  
+
+  // var plan = $("input[name='plan']:checked").val();
+  // if(plan=="A"){
+  //     adSem = 2;
+  // }else if(plan=="B"){
+  //     adSem = 1;
+  // }else{
+  //     adSem = 0;
+  // }
+  
+  var count = 0;
+    $(".semdays:checked").each(function () {
+        count++;
+        if( (($('#seminarCount').val()*1) +  adSem) < count){
+            $(this).prop("checked",false);
+        }
+    });
+
+});
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // F I R S T  P A N E  Submission
 
   $('#nextOne').click(function(){
@@ -247,8 +397,8 @@ $(document).on('click', '#removeFreeproducts', function () {
       $("#primaryTelephone").removeClass("has-error");
     }
 
-     
-    if ($('#newParticipants input[required]').length == 0){
+    var plan = $("input[name='plan']:checked").val();
+    if (   ($('#newParticipants input[required]').length == 0) && (plan != 'C')   ){
           error_newParticipants = "";
           $("#error_newParticipants").text(error_newParticipants);
           $(this).removeClass("has-error");
@@ -282,6 +432,12 @@ $(document).on('click', '#removeFreeproducts', function () {
         scrollTop: 0
       }, 100);
 
+
+          //UPDATE
+
+    updateData(data);
+    
+
     } else {
 
       $.alert({
@@ -310,8 +466,9 @@ $(document).on('click', '#removeFreeproducts', function () {
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 // S E C O N D  P A N E  Submission
+
 $('#nextTwo').click(function(){
   //check if all fields are filled
   var error_discount = "";
@@ -458,39 +615,50 @@ $('#nextTwo').click(function(){
   });
 
 
-  if ($.trim($("#promoFlyer").val()).length == 0) {
-    error_primaryContact = "Contact is required";
-    $("#error_primaryContact").text(error_primaryContact);
-    $("#primaryContact").addClass("has-error");
+  
+  if ( $("input[name='promoFlyer']:checked").val() == "yes" && ($.trim($("#promoflyerPages").val()).length == 0) ) {
+    error_promoflyerPages = "Promo Flyer Pages is required";
+    $("#error_promoflyerPages").text(error_promoflyerPages);
+    $("#promoflyerPages").addClass("has-error");
     errors++;
   } else {
-    error_primaryContact = "";
-    $("#error_primaryContact").text(error_primaryContact);
-    $("#primaryContact").removeClass("has-error");
+    error_promoflyerPages = "";
+    $("#error_promoflyerPages").text(error_promoflyerPages);
+    $("#promoflyerPages").removeClass("has-error");
   }
-
-
-
-
-
  
-
+  
   if (!errors){
    // $('form').submit();
 
-   alert('OK');
-
-    $('#supplier-tab').removeClass('active');
-    $('#supplier-tab').addClass('disabled');
-    $('#supplier').removeClass('active');
+    $('#specials-tab').removeClass('active');
+    $('#specials-tab').addClass('disabled');
+    $('#specials').removeClass('active');
     
-    $('#specials-tab').addClass('active');
-    $('#specials-tab').removeClass('disabled');
-    $('#specials').addClass('active show in');
+    $('#seminar-tab').addClass('active');
+    $('#seminar-tab').removeClass('disabled');
+    $('#seminar').addClass('active show in');
 
     $('html, body').animate({
       scrollTop: 0
     }, 100);
+
+
+    //UPDATE
+    
+    if($("input[name='promoFlyer']:checked").val() == "no"){
+      data.flyerPages = 0;
+    } else {
+      data.flyerPages = ($("#promoflyerPages").val())*1;
+    }
+
+    if($("input[name='brandRecognition']:checked").val() == "No"){
+      data.brandRecog = 0;
+    } else {
+      data.brandRecog = 50;
+    }
+
+    updateData(data);    
 
   } else {
 
@@ -515,18 +683,117 @@ $('#nextTwo').click(function(){
 
 });
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// S E C O N D  P A N E  Previous
+
+$('#previousTwo').click(function(){
+
+  $('#specials-tab').removeClass('active');
+  $('#specials-tab').addClass('disabled');
+  $('#specials').removeClass('active');
+  
+  $('#supplier-tab').addClass('active');
+  $('#supplier-tab').removeClass('disabled');
+  $('#supplier').addClass('active show in');
+
+  $('html, body').animate({
+    scrollTop: $("body").offset().top
+  }, 100);
+
+});
 
 ////////////////////////////////////////////////////
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// T H I R D  P A N E  Submission
+
+$('#nextThree').click(function(){
+  //check if all fields are filled
+  var error_discount = "";
+  var error_discountAdditional = "";
+  var error_dating = "";
+  var error_datingOthers = "";
+  var error_showBuy1 = "";
+  var error_showBuy2 = "";
+  var error_incentive = "";
+  var error_incentiveOthers = "";
+
+  var errors = 0;
 
 
-//Plan selection
-$(".card").on("click", function () {
-  $(".card").removeClass("bg-card-selected");
-  $(this).find("input[name='plan']").prop("checked", true);
-  $(this).addClass("bg-card-selected");
-  //var plan = $("input[name='plan']:checked").val();
+
+
+
+
 });
+
+
+
+//////////////////////////////////////////////
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// T H I R D  P A N E  Previous
+
+$('#previousThree').click(function(){
+
+  $('#seminar-tab').removeClass('active');
+  $('#seminar-tab').addClass('disabled');
+  $('#seminar').removeClass('active');
+  
+  $('#specials-tab').addClass('active');
+  $('#specials-tab').removeClass('disabled');
+  $('#specials').addClass('active show in');
+
+  $('html, body').animate({
+    scrollTop: $("body").offset().top
+  }, 100);
+
+});
+
+////////////////////////////////////////////////////////////////////////
+
+$(".semdays").on("click",function () {
+  var plan = $("input[name='plan']:checked").val();
+  if(plan=="A"){
+      adSem = 2;
+  }else if(plan=="B"){
+      adSem = 1;
+  }else{
+      adSem = 0;
+  }
+
+   
+  if($(this).prop("checked")){
+      $("input[data='"+$(this).attr("data")+"']").not($(this)).prop("checked",false);
+      if($(".semdays:checked").length > ($('#seminarCount').val()*1) + adSem){
+          $(this).prop("checked",false);
+          
+          $.alert({
+            columnClass: 'col-md-6',
+            backgroundDismiss: true,
+            onClose: function () {
+                $('html, body').animate({
+                  scrollTop: $("#seminarCount").offset().top-40
+                }, 100);
+             },
+            icon: 'fa fa-warning',
+            title: 'Seminar Sessions exceeded!  !',
+            content: 'You have exceeded the limit of Seminar Sessions for your Plan. Kindly add Seminar Sessions @ $500 each.',
+            type: 'red',
+            typeAnimated: true,
+          });
+
+      }else{
+
+      }
+  }
+
+});
+
+
+
+
 
 
   // $("#btn_login_details").click(function () {
