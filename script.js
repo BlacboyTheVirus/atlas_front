@@ -18,6 +18,7 @@ $(document).ready(function () {
     flyerPages      : 0,
     brandRecog      : 0,
     seminarCount    : 0,
+    dating          : 0,
   };
 
 
@@ -40,6 +41,28 @@ $(document).ready(function () {
           break;
       }
 
+      if($('#dating').val() == "others"){
+        data.dating = $('#datingOthers').val()*1;
+      }else{
+        data.dating = $('#dating').val()*1;
+      }
+
+
+
+      if($('#incentive').val() == "others"){
+        data.incentive = $('#incentiveOthers').val()*1;
+      }else{
+        data.incentive = $('#incentive').val()*1;
+      }
+
+
+      if ($("input[name='promoFlyer']:checked").val() == "yes"){
+        data.flyerPages = ($('#promoflyerPages').val())*1;
+      }else{
+        data.flyerPages = 0;
+      }
+
+
       console.log(data);
   }
 
@@ -61,9 +84,10 @@ $(document).ready(function () {
             vshowAmount = (data.addedUsers - data.freeUsers) * 50 ;
          
 
-          $("#virtualParticipantCount").text( data.addedUsers + ' total users ('+ data.freeUsers + ' free) | ' + (data.addedUsers - data.freeUsers)  + ' users @ $50)');
+          $("#virtualParticipantCount").text( data.addedUsers + ' total  ('+ data.freeUsers + ' free) | ' + (data.addedUsers - data.freeUsers)  + ' participant(s) @ $50 each)');
 
           $("#virtualParticipant").text(vshowAmount);
+          $("#planSummary").text('Class '+ data.plan);
 
           
           $("#promotionalFlyerPages").text(data.flyerPages + ' pages @ $50 per page');
@@ -85,6 +109,8 @@ $(document).ready(function () {
           
           $("#virtualParticipantCount").text( 'Unlimited free user)');
           $("#virtualParticipant").text( vshowAmount );
+
+          $("#planSummary").text('Class '+ data.plan);
 
           
           $("#promotionalFlyerPages").text(data.flyerPages + ' pages @ $50 per page');
@@ -112,12 +138,15 @@ $(document).ready(function () {
 
           $("#brandAmount").text(data.brandRecog);
 
+          $("#planSummary").text('Class '+ data.plan);
+
           $("#seminarsessionSum").text( ' | Not eligible' );  
 
           $("#seminarsession").text(0);   
 
       }
 
+      $('#seminarTotal').text('You have ' + (data.seminarCount * 1 + data.adSem * 1) + ' seminar sessions.') ;
 
       var sum = 0;
         $(".summable").each(function () {
@@ -129,6 +158,195 @@ $(document).ready(function () {
   }
 
 
+//////////////// DOPREVIEW //////////////////////////////////////////
+
+  function doPreview(){
+    $('#companyName_prv').text( $('#companyName').val() );
+    $('#primaryEmail_prv').text( $('#primaryEmail').val() );
+    $('#primaryContact_prv').text( $('#primaryContact').val() );
+    $('#primaryTelephone_prv').text( $('#primaryTelephone').val() );
+    $('#primaryMobile_prv').text( $('#primaryMobile').val() );
+    $('#primaryFax_prv').text( $('#primaryFax').val() );
+
+    $('#address_prv').text( $('#address').val() + ', ' + $('#city').val() +', '+ $('#state').val() +', '+ $('#country').val() + ', ' +$('#zipCode').val()  );
+
+
+
+    $(".semdays:checked").each(function () {
+          
+      semtimeArray = $(this).val().split('-');
+      semdate = semtimeArray[0];
+      semtime = semtimeArray[1];
+
+       seminar += semdate + ' November (' + semtime + ') // ';
+    
+    });
+
+
+    var plan = $("input[name='plan']:checked").val();
+    descr = "";
+    if (plan == 'A'){
+      descr = "$ 2,000 - Show Registration, 2 Seminar Spots included, Unlimited Users";
+    } else if (plan == 'B'){
+      descr = "$ 1,000 - Show Registration, (Main contact is the participant), 1 Seminar Spot included, 1 Free User (Additional users at $50 per User)";
+    } else if (plan == 'C'){
+       descr = "$ 500 - Show Registration, (Main contact is the participant)";
+    }
+
+
+    $('#regPlan').text( 'Class ' + plan );
+    $('#regDescr').text( descr );
+
+
+    // Adding a row inside the Additional Users tbody.
+    var addUser='';    
+    $('#addUsersTBody').empty();
+        
+    $("#newParticipants .inputFormParticipants").each(function(){
+      addUser += '<tr>';
+      addUser += '<td id="participantsName_prv"> '+ $(this).find(".participantsName").val() + ' </td>';
+      addUser += '<td id="participantsEmail_prv"> '+ $(this).find(".participantsEmail").val() + ' </td>';
+      addUser += '<td id="participantsMobile_prv"> '+ $(this).find(".participantsMobile").val() + ' </td>';
+      addUser += '</tr>';
+    });
+    
+    if ($("#newParticipants .inputFormParticipants").length == 0){
+      addUser ='<tr><td colspan=3>  N / A  </td> </tr>';
+    }
+
+    $('#addUsersTBody').prepend(addUser);
+
+
+    $('#discount_prv').text( $('#discount').val() + '%' );
+    $('#discountAdditional_prv').text( $('#discountAdditional').val() );
+
+    $('#dating_prv').text(data.dating + ' days');
+
+    $('#showBuy1_prv').text( $('#showBuy1').val() );
+    $('#showBuy2_prv').text( $('#showBuy2').val() );
+
+
+    $('#incentive_prv').text( data.incentive + ' %');
+
+
+
+     // Add Hotbuys  tbody.
+     var addhotBuys ='';
+     $('#hotBuysTBody').empty();
+    
+     $("#newHotbuys .inputFormHotBuys").each(function(){
+       addhotBuys += '<tr>';
+       addhotBuys += '<td>'+ $(this).find(".hotbuysVendor").val() + ' </td>';
+       addhotBuys += '<td>'+ $(this).find(".hotbuysDescription").val() + ' </td>';
+       addhotBuys += '<td>'+ $(this).find(".hotbuysNetcost").val() + ' </td>';
+       addhotBuys += '</tr>';
+     });
+
+     if ($("#newHotbuys .inputFormHotBuys").length == 0){
+       addhotBuys ='<tr><td colspan=3>  N / A  </td> </tr>';
+     }
+     
+     $('#hotBuysTBody').prepend(addhotBuys);
+
+     $('#promoFlyer_prv').text( data.flyerPages );
+
+     $('#brandRecog_prv').text( (data.brandRecog)?'Yes':'No' );
+
+
+    // Adding a row inside the Additional Users tbody.
+    var freeProducts='';   
+    $("#newFreeproducts .inputFreeproducts").each(function(){
+      freeProducts +=  $(this).find(".freeProducts").val();
+      freeProducts +=  ' | ';
+    });
+
+    if ($("#newFreeproducts .inputFreeproducts").length == 0){
+      freeProducts ='N / A ';
+    }
+
+    $('#freeProducts_prv').text(freeProducts);
+
+
+
+
+    // Add Seminar Presenters  tbody.
+    var addPresenters ='';
+      addPresenters += '<tr>';
+      addPresenters += '<td>'+ $("#seminarName").val() + ' </td>';
+      addPresenters += '<td>'+ $("#seminarEmail").val() + ' </td>';
+      addPresenters += '<td>'+ $("#seminarPhone").val() + ' </td>';
+      addPresenters += '<td> Lead </td>';
+      addPresenters += '</tr>';
+
+
+    $('#addPresentersTBody').empty();
+   
+    $("#additionalPresenters .inputFormSeminar").each(function(){
+      addPresenters += '<tr>';
+      addPresenters += '<td>'+ $(this).find(".seminarAddName").val() + ' </td>';
+      addPresenters += '<td>'+ $(this).find(".seminarAddEmail").val() + ' </td>';
+      addPresenters += '<td>'+ $(this).find(".seminarAddMobile").val() + ' </td>';
+      addPresenters += '<td> Presenter </td>';
+      addPresenters += '</tr>';
+    });
+
+    $('#addPresentersTBody').prepend(addPresenters);
+
+
+
+    $('#seminarSessions_prv').text(data.adSem + data.seminarCount);
+
+    var seminar = '';
+    
+    $(".semdays:checked").each(function () {
+          
+      semtimeArray = $(this).val().split('-');
+      semdate = semtimeArray[0];
+      semtime = semtimeArray[1];
+
+       seminar += semdate + ' November (' + semtime + ') // ';
+    
+    });
+    $('#seminarDatesTime_prv').text(seminar);
+
+
+
+    var costSummary = $('#costSummary').clone();
+    $('#costPreview').html(costSummary);
+    
+
+
+
+
+
+
+  }
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  function isEmail(email) {
+    var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+    return regex.test(email);
+  }
 
 // Install numeric input filters.
 //Discount 0.0-99.0 Decimal
@@ -141,6 +359,11 @@ $("#discount").inputFilter(function(value) {
 $("#showBuy1, #showBuy2, #promoflyerPages").inputFilter(function(value) {
   return /^\d*$/.test(value); 
 });
+
+
+
+
+
 
 
   
@@ -219,6 +442,7 @@ $("#dating").on("change",function () {
   }else{
       $("#datingOthers").parent().hide();
   }
+  
 });
 
 
@@ -332,7 +556,6 @@ $("#seminarPlus").click(function () {
 
   data.seminarCount =  ($('#seminarCount').val())*1;
   updateData(data);
-
   doSummary(data);
 
   
@@ -351,25 +574,18 @@ $("#seminarMinus").click(function () {
     $('#seminarCount').val(valnew);
 
     data.seminarCount =  ($('#seminarCount').val())*1;
-    updateData(data);   
 
+    updateData(data);   
     doSummary(data);
+
+    
   }
   
-
-  // var plan = $("input[name='plan']:checked").val();
-  // if(plan=="A"){
-  //     adSem = 2;
-  // }else if(plan=="B"){
-  //     adSem = 1;
-  // }else{
-  //     adSem = 0;
-  // }
   
   var count = 0;
     $(".semdays:checked").each(function () {
         count++;
-        if( (($('#seminarCount').val()*1) +  adSem) < count){
+        if( ((data.seminarCount*1) +  data.adSem) < count){
             $(this).prop("checked",false);
         }
     });
@@ -392,7 +608,6 @@ $("#seminarMinus").click(function () {
     var error_zipCode = "";
     var error_primaryContact = "";
     var error_primaryEmail = "";
-    var filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
     var error_primaryTelephone = "";
     var error_primaryMobile = "";
     var error_primaryFax = "";
@@ -466,8 +681,19 @@ $("#seminarMinus").click(function () {
       $("#primaryContact").removeClass("has-error");
     }
 
-    if ($.trim($("#primaryEmail").val()).length == 0) {
+    if ($.trim($("#primaryEmail").val()).length == 0 ) {
       error_primaryEmail = "Email is required";
+      $("#error_primaryEmail").text(error_primaryEmail);
+      $("#primaryEmail").addClass("has-error");
+      errors++;
+    } else {
+      error_primaryEmail = "";
+      $("#error_primaryEmail").text(error_primaryEmail);
+      $("#primaryEmail").removeClass("has-error");
+    }
+
+    if ( !isEmail($.trim($("#primaryEmail").val()) ) ) {
+      error_primaryEmail = "Email is incorrect. Please Check.";
       $("#error_primaryEmail").text(error_primaryEmail);
       $("#primaryEmail").addClass("has-error");
       errors++;
@@ -749,8 +975,7 @@ $('#nextTwo').click(function(){
       data.brandRecog = 50;
     }
 
-    updateData(data);  
-    
+    updateData(data);      
     doSummary(data);
 
   } else {
@@ -802,19 +1027,168 @@ $('#previousTwo').click(function(){
 
 $('#nextThree').click(function(){
   //check if all fields are filled
-  var error_discount = "";
-  var error_discountAdditional = "";
-  var error_dating = "";
-  var error_datingOthers = "";
-  var error_showBuy1 = "";
-  var error_showBuy2 = "";
-  var error_incentive = "";
-  var error_incentiveOthers = "";
+  var error_semdays = "";
+  var error_seminarName = "";
+  var error_seminarEmail = "";
+  var error_seminarPhone = "";
+
+  var error_additionalPresenters = "";
+
+
 
   var errors = 0;
 
+  if($(".semdays:checked").length < (data.seminarCount*1) + data.adSem){
+    error_semdays = "Seminar slots selected is less than the sessions total you have.";
+    $("#error_semdays").text(error_semdays);
+    $("#semtable").addClass("has-error");
+    errors++;
+  } else {
+    error_semdays = "";
+    $("#error_semdays").text(error_semdays);
+    $("#semtable").removeClass("has-error");
+  }
 
 
+
+  if ($.trim($("#seminarName").val()).length == 0) {
+    error_seminarName = "Presenter Name is required";
+    $("#error_seminarName").text(error_seminarName);
+    $("#seminarName").addClass("has-error");
+    errors++;
+  } else {
+    error_seminarName = "";
+    $("#error_seminarName").text(error_seminarName);
+    $("#seminarName").removeClass("has-error");
+  }
+
+ 
+  if ($.trim($("#seminarEmail").val()).length == 0) {
+    error_seminarEmail = "Presenter Email is required";
+    $("#error_seminarEmail").text(error_seminarEmail);
+    $("#seminarEmail").addClass("has-error");
+    errors++;
+  } else {
+    error_seminarEmail = "";
+    $("#error_seminarEmail").text(error_seminarEmail);
+    $("#seminarEmail").removeClass("has-error");
+  }
+
+
+  if ( !isEmail($.trim($("#seminarEmail").val()) ) ) {
+    error_seminarEmail = "Email is incorrect. Please check.";
+    $("#error_seminarEmail").text(error_seminarEmail);
+    $("#seminarEmail").addClass("has-error");
+    errors++;
+  } else {
+    error_seminarEmail = "";
+    $("#error_seminarEmail").text(error_seminarEmail);
+    $("#seminarEmail").removeClass("has-error");
+  }
+
+  
+
+
+  if ($.trim($("#seminarPhone").val()).length == 0) {
+    error_seminarPhone = "Presenter Phone is required";
+    $("#error_seminarPhone").text(error_seminarPhone);
+    $("#seminarPhone").addClass("has-error");
+    errors++;
+  } else {
+    error_seminarPhone = "";
+    $("#error_seminarPhone").text(error_seminarPhone);
+    $("#seminarPhone").removeClass("has-error");
+  }
+
+
+  if ($('#additionalPresenters input[required]').length == 0){
+    error_additionalPresenters = "";
+    $("#error_additionalPresenters").text(error_additionalPresenters);
+    $(this).removeClass("has-error");
+  }
+
+ $('#additionalPresenters input[required]').each(function(){
+    if($(this).val()==""){
+      error_additionalPresenters = "Fill all Presenters' details";
+      $("#error_additionalPresenters").text(error_additionalPresenters);
+      $(this).addClass("has-error");
+      errors++;
+      console.log(errors);
+    } else {
+      error_additionalPresenters = "";
+      $("#error_additionalPresenters").text(error_additionalPresenters);
+      $(this).removeClass("has-error");
+      console.log(errors);
+    }
+  });
+
+  
+
+
+  if (!errors ||  (data.plan=="C")){
+   // $('form').submit();
+
+    $('#seminar-tab').removeClass('active');
+    $('#seminar-tab').addClass('disabled');
+    $('#seminar').removeClass('active');
+    
+    $('#preview-tab').addClass('active');
+    $('#preview-tab').removeClass('disabled');
+    $('#preview').addClass('active show in');
+
+    $('html, body').animate({
+      scrollTop: 0
+    }, 100);
+
+
+    //UPDATE
+    updateData(data);      
+    doSummary(data);
+    doPreview();
+
+  } else {
+
+    // if (data.plan=="C"){
+    //   errors = 0;
+
+    //    //UPDATE
+    //   updateData(data);      
+    //   doSummary(data);
+    //   doPreview();
+
+    //   $('#seminar-tab').removeClass('active');
+    //   $('#seminar-tab').addClass('disabled');
+    //   $('#seminar').removeClass('active');
+      
+    //   $('#preview-tab').addClass('active');
+    //   $('#preview-tab').removeClass('disabled');
+    //   $('#preview').addClass('active show in');
+  
+    //   $('html, body').animate({
+    //     scrollTop: 0
+    //   }, 100);
+      
+    //   return false;
+
+    // }
+
+    $.alert({
+      columnClass: 'col-md-6',
+      backgroundDismiss: true,
+      onClose: function () {
+          $('html, body').animate({
+            scrollTop: $(".has-error").offset().top-40
+          }, 100);
+       },
+      icon: 'fa fa-warning',
+      title: 'Encountered an error!',
+      content: 'Some required fields have not been filled. ',
+      type: 'red',
+      typeAnimated: true,
+    
+    });
+     
+  }
 
 
 
@@ -844,22 +1218,54 @@ $('#previousThree').click(function(){
 
 });
 
+
+
+////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// F O U R T H  P A N E  S U B M I T 
+
+$('#previousFour').click(function(){
+
+  $('#preview-tab').removeClass('active');
+  $('#preview-tab').addClass('disabled');
+  $('#preview').removeClass('active');
+  
+  $('#seminar-tab').addClass('active');
+  $('#seminar-tab').removeClass('disabled');
+  $('#seminar').addClass('active show in');
+
+  $('html, body').animate({
+    scrollTop: $("body").offset().top
+  }, 100);
+
+});
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+// F O U R T H  P A N E  Previous
+
+$("#submit").on("click", function(){
+    $('#atlasform').submit();
+});
+
+
+
 ////////////////////////////////////////////////////////////////////////
 
 $(".semdays").on("click",function () {
   var plan = $("input[name='plan']:checked").val();
-  if(plan=="A"){
-      adSem = 2;
-  }else if(plan=="B"){
-      adSem = 1;
-  }else{
-      adSem = 0;
-  }
+
+  updateData(data);      
+  doSummary(data);
 
    
   if($(this).prop("checked")){
       $("input[data='"+$(this).attr("data")+"']").not($(this)).prop("checked",false);
-      if($(".semdays:checked").length > ($('#seminarCount').val()*1) + adSem){
+     // if($(".semdays:checked").length > ($('#seminarCount').val()*1) + adSem){
+      if($(".semdays:checked").length > (data.seminarCount*1) + data.adSem){
           $(this).prop("checked",false);
           
           $.alert({
@@ -884,164 +1290,12 @@ $(".semdays").on("click",function () {
 
 });
 
-
-
-
-
-
-  // $("#btn_login_details").click(function () {
-  //   var error_email = "";
-  //   var error_password = "";
-  //   var filter =
-  //     /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-
-  //   if ($.trim($("#email").val()).length == 0) {
-  //     error_email = "Email is required";
-  //     $("#error_email").text(error_email);
-  //     $("#email").addClass("has-error");
-  //   } else {
-  //     if (!filter.test($("#email").val())) {
-  //       error_email = "Invalid Email";
-  //       $("#error_email").text(error_email);
-  //       $("#email").addClass("has-error");
-  //     } else {
-  //       error_email = "";
-  //       $("#error_email").text(error_email);
-  //       $("#email").removeClass("has-error");
-  //     }
-  //   }
-
-  //   if ($.trim($("#password").val()).length == 0) {
-  //     error_password = "Password is required";
-  //     $("#error_password").text(error_password);
-  //     $("#password").addClass("has-error");
-  //   } else {
-  //     error_password = "";
-  //     $("#error_password").text(error_password);
-  //     $("#password").removeClass("has-error");
-  //   }
-
-  //   if (error_email != "" || error_password != "") {
-  //     return false;
-  //   } else {
-  //     $("#list_login_details").removeClass("active active_tab1");
-  //     $("#list_login_details").removeAttr("href data-toggle");
-  //     $("#login_details").removeClass("active");
-  //     $("#list_login_details").addClass("inactive_tab1");
-  //     $("#list_personal_details").removeClass("inactive_tab1");
-  //     $("#list_personal_details").addClass("active_tab1 active");
-  //     $("#list_personal_details").attr("href", "#personal_details");
-  //     $("#list_personal_details").attr("data-toggle", "tab");
-  //     $("#personal_details").addClass("active in");
-  //   }
-  // });
-
-  // $("#previous_btn_personal_details").click(function () {
-  //   $("#list_personal_details").removeClass("active active_tab1");
-  //   $("#list_personal_details").removeAttr("href data-toggle");
-  //   $("#personal_details").removeClass("active in");
-  //   $("#list_personal_details").addClass("inactive_tab1");
-  //   $("#list_login_details").removeClass("inactive_tab1");
-  //   $("#list_login_details").addClass("active_tab1 active");
-  //   $("#list_login_details").attr("href", "#login_details");
-  //   $("#list_login_details").attr("data-toggle", "tab");
-  //   $("#login_details").addClass("active in");
-  // });
-
-  // $("#btn_personal_details").click(function () {
-  //   var error_first_name = "";
-  //   var error_last_name = "";
-
-  //   if ($.trim($("#first_name").val()).length == 0) {
-  //     error_first_name = "First Name is required";
-  //     $("#error_first_name").text(error_first_name);
-  //     $("#first_name").addClass("has-error");
-  //   } else {
-  //     error_first_name = "";
-  //     $("#error_first_name").text(error_first_name);
-  //     $("#first_name").removeClass("has-error");
-  //   }
-
-  //   if ($.trim($("#last_name").val()).length == 0) {
-  //     error_last_name = "Last Name is required";
-  //     $("#error_last_name").text(error_last_name);
-  //     $("#last_name").addClass("has-error");
-  //   } else {
-  //     error_last_name = "";
-  //     $("#error_last_name").text(error_last_name);
-  //     $("#last_name").removeClass("has-error");
-  //   }
-
-  //   if (error_first_name != "" || error_last_name != "") {
-  //     return false;
-  //   } else {
-  //     $("#list_personal_details").removeClass("active active_tab1");
-  //     $("#list_personal_details").removeAttr("href data-toggle");
-  //     $("#personal_details").removeClass("active");
-  //     $("#list_personal_details").addClass("inactive_tab1");
-  //     $("#list_contact_details").removeClass("inactive_tab1");
-  //     $("#list_contact_details").addClass("active_tab1 active");
-  //     $("#list_contact_details").attr("href", "#contact_details");
-  //     $("#list_contact_details").attr("data-toggle", "tab");
-  //     $("#contact_details").addClass("active in");
-  //   }
-  // });
-
-  // $("#previous_btn_contact_details").click(function () {
-  //   $("#list_contact_details").removeClass("active active_tab1");
-  //   $("#list_contact_details").removeAttr("href data-toggle");
-  //   $("#contact_details").removeClass("active in");
-  //   $("#list_contact_details").addClass("inactive_tab1");
-  //   $("#list_personal_details").removeClass("inactive_tab1");
-  //   $("#list_personal_details").addClass("active_tab1 active");
-  //   $("#list_personal_details").attr("href", "#personal_details");
-  //   $("#list_personal_details").attr("data-toggle", "tab");
-  //   $("#personal_details").addClass("active in");
-  // });
-
-  // $("#btn_contact_details").click(function () {
-  //   var error_address = "";
-  //   var error_mobile_no = "";
-  //   var mobile_validation = /^\d{10}$/;
-  //   if ($.trim($("#address").val()).length == 0) {
-  //     error_address = "Address is required";
-  //     $("#error_address").text(error_address);
-  //     $("#address").addClass("has-error");
-  //   } else {
-  //     error_address = "";
-  //     $("#error_address").text(error_address);
-  //     $("#address").removeClass("has-error");
-  //   }
-
-  //   if ($.trim($("#mobile_no").val()).length == 0) {
-  //     error_mobile_no = "Mobile Number is required";
-  //     $("#error_mobile_no").text(error_mobile_no);
-  //     $("#mobile_no").addClass("has-error");
-  //   } else {
-  //     if (!mobile_validation.test($("#mobile_no").val())) {
-  //       error_mobile_no = "Invalid Mobile Number";
-  //       $("#error_mobile_no").text(error_mobile_no);
-  //       $("#mobile_no").addClass("has-error");
-  //     } else {
-  //       error_mobile_no = "";
-  //       $("#error_mobile_no").text(error_mobile_no);
-  //       $("#mobile_no").removeClass("has-error");
-  //     }
-  //   }
-  //   if (error_address != "" || error_mobile_no != "") {
-  //     return false;
-  //   } else {
-  //     $("#btn_contact_details").attr("disabled", "disabled");
-  //     $(document).css("cursor", "prgress");
-  //     $("#register_form").submit();
-  //   }
-  // });
-
-
-
-
-
 });
+
+
+
+
+
 
 
 

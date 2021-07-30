@@ -28,6 +28,10 @@
 
     <style>
 
+@media print {
+    .pagebreak { page-break-before: always; } /* page-break-after works, as well */
+}
+
       .summable{
         text-align: right;
       }
@@ -112,19 +116,14 @@
     
 
 
-    <div class="py-5 text-center">
+    <div class="py-2 text-center">
       <img class="d-block mx-auto mb-4" src="images/atlas.png" alt="" height="150">
-     
     </div>
-
-    
-    
-    
     
     <div class="container">
       <div class="col-md-12">
 
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <ul class="nav nav-tabs d-print-none" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
             <button class="nav-link active" id="supplier-tab" data-bs-toggle="tab" data-bs-target="#supplier" type="button" role="tab" aria-controls="supplier" aria-selected="true"> 
               <h4 class="mb-3">Supplier Information</h4>
@@ -138,13 +137,24 @@
           </li>
 
           <li class="nav-item" role="presentation">
-            <button class="nav-link  " id="seminar-tab" data-bs-toggle="tab" data-bs-target="#seminar" type="button" role="tab" aria-controls="seminar" aria-selected="false">
+            <button class="nav-link disabled  " id="seminar-tab" data-bs-toggle="tab" data-bs-target="#seminar" type="button" role="tab" aria-controls="seminar" aria-selected="false">
               <h4 class="mb-3">Vendor Seminar</h4>
             </button>
           </li>
+
+
+          <li class="nav-item" role="preview">
+            <button class="nav-link  " id="preview-tab" data-bs-toggle="tab" data-bs-target="#preview" type="button" role="tab" aria-controls="preview" aria-selected="false">
+              <h4 class="mb-3">Preview</h4>
+            </button>
+          </li>
+
+
         </ul>
 
-<form class="needs-validation">
+<form  id="atlasform" method="GET"  novalidate> 
+
+
         <div class="tab-content pt-4" id="myTabContent" >
 
 <!-- PANE -->
@@ -245,7 +255,7 @@
                           <p class="card-text">
                             <div style="border-bottom: 1px solid rgba(0,0,0,.125); padding: 5px">Show Registration <br/>&nbsp;</div>
                             <div style="border-bottom: 1px solid rgba(0,0,0,.125); padding: 5px">2 Seminar Spots included</div>
-                            Unlimited Users (Add Users below)
+                            Unlimited Participants (Add Participants below)
                           </p>
                         </div>
 
@@ -267,7 +277,7 @@
                           <p class="card-text">
                             <div style="border-bottom: 1px solid rgba(0,0,0,.125); padding: 5px">Show Registration <br/>(Main contact is the participant)</div>
                             <div style="border-bottom: 1px solid rgba(0,0,0,.125); padding: 5px">1 Seminar Spot included</div>
-                            1 Free User (Add users below at $50 per User)
+                            1 Free Participant (Add Participants below at $50 per participant)
                           </p>
                         </div>
 
@@ -303,11 +313,11 @@
                 <!-- END CARD DECK -->
 
                 <div id="participantTemplate" style="display: none;">
-                  <div class="row mt-2" id="inputFormParticipants"> 
+                  <div class="row mt-2 inputFormParticipants" id="inputFormParticipants"> 
                   <span id="error_Participants" class="text-danger error-label"></span>
-                  <div class="col-sm-4"><input type="text" class="form-control" name="participantsName[]" placeholder="Participants Name" value="" required><div class="invalid-feedback">Participants Name is required.</div></div>
-                  <div class="col-sm-3"><input type="text" class="form-control" name="participantsEmail[]" placeholder="Participants Email" value="" required><div class="invalid-feedback">Primary Contact is required.</div></div>
-                  <div class="col-sm-3"><input type="text" class="form-control" name="participantsMobile[]" placeholder="Participants Mobile" value="" required><div class="invalid-feedback">Primary Contact is required.</div></div>
+                  <div class="col-sm-4"><input type="text" class="form-control participantsName " name="participantsName[]" placeholder="Participants Name" value="" required><div class="invalid-feedback">Participants Name is required.</div></div>
+                  <div class="col-sm-3"><input type="text" class="form-control participantsEmail" name="participantsEmail[]" placeholder="Participants Email" value="" required><div class="invalid-feedback">Primary Contact is required.</div></div>
+                  <div class="col-sm-3"><input type="text" class="form-control participantsMobile " name="participantsMobile[]" placeholder="Participants Mobile" value="" required><div class="invalid-feedback">Primary Contact is required.</div></div>
                   <div class="col-sm-2"><div class="input-group-append"><button id="removeParticipants" type="button" class="btn btn-danger">Remove</button></div></div>
                   </div>
                 </div>
@@ -384,7 +394,7 @@
 
 
                 <div class="row g-2">
-                  <div class="col-md-12">Number of discounted buys </div>
+                  <div class="col-md-12 form-label">Number of discounted buys </div>
 
                   <div class="col-md-4">
                       <label for="showBuy1" class="form-label">1st Show Buy (by December 23, 2021)</label>
@@ -430,7 +440,10 @@
                 </div>
 
                 <div id="hotbuyTemplate" style="display: none;">
-                  <div class="row mt-2" id="inputFormHotbuys"> <div class="col-sm-2"><input type="text" class="form-control" name="hotbuysVendor[]" placeholder="Enter Vendor #" value="" required=""><div class="invalid-feedback">Vendor # is required.</div></div><div class="col-sm-5"><input type="text" class="form-control" name="hotBuysDescription[]" placeholder="Description" value="" required=""><div class="invalid-feedback">Description is required.</div></div><div class="col-sm-3"><input type="text" class="form-control hotbuysNetcost" id="hotbuysNetcost" name="hotbuysNetcost[]" placeholder="Net cost or Discount" value="" required=""><div class="invalid-feedback">Net Cost or DIscount</div></div><div class="col-sm-2"><div class="input-group-append"><button id="removeHotbuys" type="button" class="btn btn-danger">Remove</button></div></div></div>
+                  <div class="row mt-2 inputFormHotBuys" id="inputFormHotbuys"> <div class="col-sm-2">
+                    <input type="text" class="form-control hotbuysVendor" name="hotbuysVendor[]" placeholder="Enter Vendor #" value="" required=""><div class="invalid-feedback">Vendor # is required.</div></div><div class="col-sm-5">
+                    <input type="text" class="form-control hotbuysDescription" name="hotbuysDescription[]" placeholder="Description" value="" required=""><div class="invalid-feedback">Description is required.</div></div><div class="col-sm-3">
+                    <input type="text" class="form-control hotbuysNetcost" id="hotbuysNetcost" name="hotbuysNetcost[]" placeholder="Net cost or Discount" value="" required=""><div class="invalid-feedback">Net Cost or DIscount</div></div><div class="col-sm-2"><div class="input-group-append"><button id="removeHotbuys" type="button" class="btn btn-danger">Remove</button></div></div></div>
                 </div>
 
 
@@ -447,8 +460,8 @@
 
 
                 <div id="freeProductsTemplate" style="display: none;">
-                  <div class="row mt-2" id="inputFreeproducts"> 
-                  <div class="col-sm-4"><input type="text" class="form-control" name="freeProducts[]" placeholder="e.g Buy 10 products and get 1 free" value="" required><div class="invalid-feedback">Free Products is required</div></div>
+                  <div class="row mt-2 inputFreeproducts" id="inputFreeproducts"> 
+                  <div class="col-sm-4"><input type="text" class="form-control freeProducts" name="freeProducts[]" placeholder="e.g Buy 10 products and get 1 free" value="" required><div class="invalid-feedback">Free Products is required</div></div>
                   <div class="col-sm-2"><div class="input-group-append"><button id="removeFreeproducts" type="button" class="btn btn-danger">Remove</button></div></div></div>
                 </div>
 
@@ -533,9 +546,8 @@
               
               <!-- ROW -->
               <div class="row g-3" id="hidder">
-                
-                 
-                  <div class="sm-12">
+
+                <div class="sm-12">
                     <div class="cards">
                       <h6 class="card-header">Thank you for considering taking part in our Pre-Show Seminars.</h6>
                       <div class="card-body">
@@ -545,7 +557,6 @@
                           Time slots will be allocated by Atlas and the seminars will be held during normal working hours.<br/>
                           Please indicate which day(s) works best and whether you prefer AM or PM.<br/>
                         </p>
-                      
                       </div>
                     </div>
                   </div>
@@ -553,8 +564,7 @@
 
                   <div class="col-sm-12">
                     <label for="discount" class="form-label">Additional Seminars (Additional seminars are $500.00/session outside your plan.)</label>
-                    
-                    <div class="col-sm-6">
+                    <div class="col-sm-4">
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
                         <button class="btn btn-outline-secondary" type="button" id="seminarMinus" ><i class="fa fa-minus"></i></button>
@@ -566,11 +576,17 @@
                     </div>
                     </div>
 
+                    <div class="col-sm-6" id="seminarTotal"></div>
+
+
 
                   </div>
 
                   <div class="col-sm-12">
-                    <table class="table table-bordered table-condensed">
+
+                    <label for="address" class="form-label">Seminar Presenter</label>
+                    <div id="error_semdays" class="text-danger error-label mb-2 "></div>
+                    <table class="table table-bordered table-condensed" id="semtable">
                       
                         <thead>
                           <tr>
@@ -585,37 +601,38 @@
                         
                           <tr>
                             <td>Monday</td><td>Nov 8 </td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov8" value="8-AM"></td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov8" value="8-PM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov8" value="8-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov8" value="8-PM"></td>
                           </tr>
                         
                           <tr>
                             <td>Tuesday</td><td>Nov 9 </td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov9" value="9-AM"></td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov9" value="9-PM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov9" value="9-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov9" value="9-PM"></td>
                           </tr>
                           
                           <tr>
                             <td>Wednesday</td><td>Nov 10 </td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov10" value="10-AM"></td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov10" value="10-PM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov10" value="10-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov10" value="10-PM"></td>
                           </tr>
                           
                           <tr>
                             <td>Friday</td><td>Nov 12 </td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov12" value="12-AM"></td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov12" value="12-PM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov12" value="12-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov12" value="12-PM"></td>
                           </tr>
                           
                           <tr>
                             <td>Monday</td><td>Nov 15 </td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov15" value="15-AM"></td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov15" value="15-PM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov15" value="15-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov15" value="15-PM"></td>
                           </tr>
                           
                           <tr>
                             <td>Tuesday</td><td>Nov 16 </td>
-                            <td><input type="checkbox" class="semdays" name="seminardays[]" data="nov16" value="16-AM"></td><td><input type="checkbox" class="semdays" name="seminardays[]" data="nov16" value="16-PM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov16" value="16-AM"></td>
+                            <td><input type="checkbox" class="semdays" name="seminardays[]" data-date="nov16" value="16-PM"></td>
                           </tr>
 
                       </tbody>
@@ -637,7 +654,7 @@
 
                   <div class="col-sm-4">
                     <label for="address" class="form-label">&nbsp;</label>
-                    <input type="text" class="form-control" name="seminarPhone" id="seminarPhone" placeholder="Presenter Phone" value="" required>
+                    <input type="text" class="form-control" name="seminarPhone" id="seminarPhone" placeholder="Presenter Phone" value="" required data-mask="(999) 999-9999">
                     <span id="error_seminarPhone" class="text-danger error-label"></span>
                   </div>
 
@@ -645,11 +662,13 @@
 
 
                     <div id="seminarTemplate" style="display: none;">
-                      <div class="row mt-2" id="inputFormSeminar"> 
-                        <span id="error_seminarAdd" class="text-danger error-label"></span>
-                        <div class="col-sm-4"><input type="text" class="form-control" name="seminarAddName[]" placeholder="Presenter Name" value="" ><div class="invalid-feedback">Presenter Name is required.</div></div>
-                        <div class="col-sm-3"><input type="text" class="form-control" name="seminarAddEmail[]" placeholder="Presenter Email" value="" ><div class="invalid-feedback">Presenter Email is required.</div></div>
-                        <div class="col-sm-3"><input type="text" class="form-control" name="seminarAddMobile[]" placeholder="Presenter  Mobile" value="" ><div class="invalid-feedback">Presenter Mobile is required.</div></div>
+                      <div class="row mt-2 inputFormSeminar" id="inputFormSeminar"> 
+                        <div class="col-sm-4">
+                          <input type="text" class="form-control seminarAddName" name="seminarAddName[]" placeholder="Presenter Name" value="" required ><div class="invalid-feedback">Presenter Name is required.</div></div>
+                        <div class="col-sm-3">
+                          <input type="text" class="form-control seminarAddEmail" name="seminarAddEmail[]" placeholder="Presenter Email" value="" required><div class="invalid-feedback">Presenter Email is required.</div></div>
+                        <div class="col-sm-3">
+                          <input type="text" class="form-control seminarAddMobile" name="seminarAddMobile[]" placeholder="Presenter  Mobile" value="" required><div class="invalid-feedback">Presenter Mobile is required.</div></div>
                         <div class="col-sm-2"><div class="input-group-append"><button id="removePresenters" type="button" class="btn btn-danger">Remove</button></div></div>
                       </div>
                     </div>
@@ -674,18 +693,18 @@
 
               <hr class="my-4">
 
-              <div class="col-sm-12">
+              <div class="col-sm-12" id="costSummary">
                 <div class="cards">
                   <h5 class="card-header">Cost Summary</h5>
                   <div class="card-body">
                    
                     <table class="table">
                       <tbody><tr>
-                          <th>Registration Level</th>
+                          <th>Registration Level <span id="planSummary"></span></th>
                           <th class="summable" id="regAmount"></th>
                       </tr>
                       <tr>
-                          <th>Virtual Show User(s) 
+                          <th>Virtual Show Participant(s) 
                             <span  id="virtualParticipantCount"> </span></th>
                           <th class="summable" id="virtualParticipant"> </th>
                       </tr>
@@ -722,7 +741,246 @@
               </div>
 
             </div>
-<!-- END OF  PANE -->                        
+<!-- END OF  PANE -->  
+
+
+
+
+
+
+
+<!-- PREVIEW PANE  -->
+
+
+<!-- PANE -->            
+<div class="tab-pane fade" id="preview" role="tabpanel" aria-labelledby="preview-tab">
+              
+
+  <hr class="my-4">
+
+  <div class="col-sm-12">
+    
+      <h5 class="card-header">PREVIEW</h5>
+
+      <table class="table table-sm">
+        <tbody>
+          
+          <tr>
+            <th scope="row">Name of Company</th>
+            <td id="companyName_prv"></td>
+            
+            <th scope="row">Primary Email</th>
+            <td id="primaryEmail_prv"></td>
+          </tr>
+          
+          <tr>
+            <th scope="row">Primary Contact</th>
+            <td id="primaryContact_prv"></td>
+            
+            <th scope="row">Telephone</th>
+            <td id="primaryTelephone_prv"></td>
+          </tr>
+
+          <tr>
+            <th scope="row">Mobile</th>
+            <td id="primaryMobile_prv"></td>
+            
+            <th scope="row">Fax</th>
+            <td id="primaryFax_prv"></td>
+          </tr>
+
+          <tr>
+            <th scope="row">Address</th>
+            <td id="address_prv" colspan="3" ></td>
+          </tr>
+
+
+
+        </tbody>
+      </table>
+
+
+      <h6>Registration Level</h6>
+      <table class="table table-sm" >
+        <thead>
+          <tr>
+            <th scope="row" id="regPlan"></th>
+            <td id="regDescr"></td>
+          </tr>
+        </thead>
+        
+
+
+      </table>
+
+
+      <h6>Additional Participant(s)</h6>
+      <table class="table table-sm" >
+        <thead>
+          <tr>
+            <th scope="row">Name</th>
+            <th scope="row">Email</th>
+            <th scope="row">Cell</th>
+          </tr>
+        </thead>
+        <tbody id="addUsersTBody"></tbody>
+      </table>
+
+
+<div class="pagebreak"> </div>
+<div class="mt-4"></div>
+
+
+      <table class="table table-sm">
+        <tbody>
+          
+          <tr>
+            <th scope="row">Show Discount</th>
+            <td id="discount_prv"></td>
+            
+             <th scope="row">Addition Information</th>
+            <td id="discountAdditional_prv"></td>
+          </tr>
+
+
+          <tr>
+            <th scope="row">Special Dating Terms</th>
+            <td id="dating_prv" colspan="1"></td>
+          </tr>
+
+
+          <tr>
+            <th scope="row">First Show Buy (December 23, 2021)</th>
+            <td id="showBuy1_prv"></td>
+            
+             <th scope="row">Second Show Buy (March 31, 2022)</th>
+            <td id="showBuy2_prv"></td>
+          </tr>
+          
+        </tbody>
+      </table>
+
+
+      <table class="table table-sm">
+        <tbody>
+          <tr>
+            <th scope="row">Dealer Incentive Program. Do you want to support the “Atlas Show Buck Program” as follows?</th>
+          </tr>
+
+          <tr>
+            <td id="incentive_prv"></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+      <h6>Hot Buys Special</h6>
+      <table class="table table-sm" >
+        <thead>
+          <tr>
+            <th scope="row">Vendor #</th>
+            <th scope="row">Description</th>
+            <th scope="row">Net Cost / Discount</th>
+          </tr>
+        </thead>
+        <tbody id="hotBuysTBody"></tbody>
+      </table>
+
+      <table class="table table-sm">
+        <tbody>
+          
+          <tr>
+            <th scope="row">Promotional Flyers Pages (@ $50.00 EA)</th>
+            <td id="promoFlyer_prv"></td>
+            
+            <th scope="row">Brand Recognition</th>
+            <td id="brandRecog_prv"></td>
+          </tr>
+        
+        </tbody>
+      </table>
+
+
+      <table class="table table-sm">
+        <tbody>
+          <tr>
+            <th scope="row">Free Product Special</th>
+          </tr>
+
+          <tr>
+            <td id="freeProducts_prv"></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+
+<div class="pagebreak"> </div>
+
+      <div class="mt-4"></div>
+
+
+
+      <h6>Seminars</h6>
+      <table class="table table-sm">
+          <tr>
+            <th scope="row">Seminar Sessions</th>
+            <td id="seminarSessions_prv"></td>
+          </tr>
+          
+          <tr>
+            <th scope="row">Seminar Dates & Time</th>
+            <td id="seminarDatesTime_prv"></td>
+          </tr>
+
+        </tbody>
+      </table>
+
+
+      <h6>Seminar Presenter(s)</h6>
+      <table class="table table-sm" >
+        <thead>
+          <tr>
+            <th scope="row">Name</th>
+            <th scope="row">Email</th>
+            <th scope="row">Cell</th>
+            <th scope="row">Role</th>
+
+          </tr>
+        </thead>
+
+        <tbody id="addPresentersTBody"></tbody>
+
+      </table>
+
+      <div id="costPreview" class="mt-4"></div>
+
+
+
+
+
+    
+  </div>
+
+
+  
+
+  <hr class="my-4">
+
+  <div class="d-flex justify-content-center d-print-none" >
+    <button class="btn btn-primary btn-lg" type="button" id="previousFour" >Previous</button> 
+    <button class="btn btn-primary btn-lg" type="submit" id="submit">Submit</button>
+  </div>
+
+
+</div>
+<!-- END OF  PANE -->       
+
+
+<!-- END PREVIEW -->
+
 
           
         </div>
@@ -736,8 +994,8 @@
     </div>
   </main>
 
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017–2021 Company Name</p>
+  <footer class="my-5 pt-5 text-muted text-center text-small  d-print-none">
+    <p class="mb-1">&copy; 2021 Atlas Trailer Coach Products </p>
     <ul class="list-inline">
       <li class="list-inline-item"><a href="#">Privacy</a></li>
       <li class="list-inline-item"><a href="#">Terms</a></li>
